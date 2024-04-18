@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="en">
+
   <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
@@ -22,6 +23,7 @@
         min-height: 75rem;
         padding-top: 56px;
       }
+
       #main {
         padding-top: 10px;
       }
@@ -46,6 +48,7 @@
         white-space: nowrap;
         -webkit-overflow-scrolling: touch;
       }
+
       .nav-underline .nav-link {
         padding-top: .75rem;
         padding-bottom: .75rem;
@@ -67,6 +70,7 @@
       .bg-purple { background-color: #6f42c1; }
     </style>
   </head>
+
   <body>
     <div id="loading-div">
       LOADING...
@@ -432,17 +436,17 @@
         }
         getDomainPort() {
           if (this._server == null || this._server == "")
-            return location.hostname+(location.port ? ':'+location.port: '');
+          return location.hostname + (location.port ? ':' + location.port : '');
           return this._server;
         }
         _initSse() {
           var that = this;
-          $.get("http://"+this.getDomainPort()+"/api/sse/sub", function(data) {
+        $.get("http://" + this.getDomainPort() + "/api/sse/sub", function (data) {
             if (data == "MAX_CLIENTS") {
               alert(data);
             } else {
-              that._sseEventSource = new EventSource("http://"+that.getDomainPort()+data);
-              that._sseEventSource.addEventListener('message', function(e) {
+            that._sseEventSource = new EventSource("http://" + that.getDomainPort() + data);
+            that._sseEventSource.addEventListener('message', function (e) {
                 var data = JSON.parse(e.data);
                 switch (data.type) {
                   case "keep-alive":
@@ -455,8 +459,8 @@
               }, false);
             }
           })
-          .fail(function() {
-            alert( "sse sub error" );
+          .fail(function () {
+            alert("sse sub error");
           });
         }
       }
@@ -467,10 +471,12 @@
         }
         _downloadData(async = true) {
           var tmpData;
-          $.ajax({ dataType: "json", url: this._source, async: async, data: this._data, success: function( data ) {
+        $.ajax({
+          dataType: "json", url: this._source, async: async, data: this._data, success: function (data) {
             //TODO: htmlencode everything to prevent xss
             tmpData = data;
-          }});
+          }
+        });
           this._data = tmpData;
         }
         _getData() {
@@ -481,7 +487,7 @@
         generatePage() {
           let data = this._getData();
           let tab = $('#table-content')
-          tab.bootstrapTable({data: data});
+        tab.bootstrapTable({ data: data });
 
           /*data.forEach(entry => {
             
@@ -543,7 +549,7 @@
 
             let li = $("<li/>")
               .addClass("nav-item")
-              .attr("id", "nav-page-"+entry["id"]);
+            .attr("id", "nav-page-" + entry["id"]);
             if (!subentries) {
               let a = $("<a/>")
                 .addClass("nav-link")
@@ -575,7 +581,7 @@
               subentries.forEach(subentry => {
                 let a = $("<a/>")
                   .addClass("dropdown-item")
-                  .attr("id", "nav-page-dropdown-"+entry["id"]+"-"+subentry["id"])
+                .attr("id", "nav-page-dropdown-" + entry["id"] + "-" + subentry["id"])
                   .attr("href", "#")
                   .attr("target", "_blank")
                   .attr("onclick", "site.loadPage('" + subentry["id"] + "'); return false;")
@@ -606,7 +612,7 @@
           this._term.loadAddon(this._fitAddon);
           this._term.loadAddon(this._localEcho);
 
-          this._localEcho.addAutocompleteHandler(function(index, tokens) {
+        this._localEcho.addAutocompleteHandler(function (index, tokens) {
             if (index == 0) return ["help", "i2c", "beep", "rfid"];
             return [];
           });
@@ -614,7 +620,7 @@
           this._readPrompt();
 
           var that = this;
-          $(window).on("resize", function() {
+        $(window).on("resize", function () {
             that._fitAddon.fit();
           });
         }
@@ -627,18 +633,18 @@
         }
         _readPrompt() {
           var that = this;
-          this._localEcho.read("hackiebox@"+this._site.getDomainPort()+"$ ", "> ")
-            .then(function(input) {
-              $.get( "http://" + that._site.getDomainPort() + "/api/ajax", { cmd: "cli", cli: input }, function(data) {
+        this._localEcho.read("hackiebox@" + this._site.getDomainPort() + "$ ", "> ")
+          .then(function (input) {
+            $.get("http://" + that._site.getDomainPort() + "/api/ajax", { cmd: "cli", cli: input }, function (data) {
                   that._term.writeln(data);
                   that._readPrompt();
                 })
-                .fail(function() {
+              .fail(function () {
                   that._term.writeln("ERROR: no connection to host");
                   that._readPrompt();
                 });
             })
-            .catch(function(error) { alert(`Error reading: ${error}`);});
+          .catch(function (error) { alert(`Error reading: ${error}`); });
         }
       }
     </script>
@@ -649,7 +655,7 @@
       document.getElementById("domainPort").innerText = site.getDomainPort();
       });
       function imageFormatter(value) {
-        return '<img src="'+value+'" style="max-width:100px;max-height:100px;">'
+      return '<img src="' + value + '" style="max-width:100px;max-height:100px;">'
       }
       function submitOverlayPost(e, target) {
         setFilesize();
@@ -658,7 +664,7 @@
       }
       function setFilesize() {
         var files = document.getElementById("file").files;
-        if(typeof files[0] !== 'undefined') {
+      if (typeof files[0] !== 'undefined') {
           document.getElementById("filesize").value = files[0].size;
         }
       }
