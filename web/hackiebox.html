@@ -84,6 +84,7 @@
           </li>
           </ul>
         </div>
+      <span class="navbar-text d-none d-md-inline" id="domainPort"></span>
       </nav>
       <div id="submenu" class="nav-scroller bg-white shadow-sm">
         <div id="submenu-settings">
@@ -365,7 +366,7 @@
       class Site {
         constructor(page = null) {
           this._params = new URLSearchParams(window.location.search);
-          this._mainMenu = new MainMenu();
+        this._mainMenu = new MainMenu(this);
           this._contentPage = new ContentPage();
           this._server = this._params.get("server");
           this._console = new WebConsole(this);
@@ -488,7 +489,8 @@
         }
       }
       class MainMenu {
-        constructor() {
+      constructor(site) {
+        this._site = site;
           this._setEntries();
         }
         hasSubMenu(page) {
@@ -642,8 +644,9 @@
     </script>
     <script>
       var site;
-      $(function() {
-          site = new Site("console");
+    $(function () {
+      site = new Site("home");
+      document.getElementById("domainPort").innerText = site.getDomainPort();
       });
       function imageFormatter(value) {
         return '<img src="'+value+'" style="max-width:100px;max-height:100px;">'
